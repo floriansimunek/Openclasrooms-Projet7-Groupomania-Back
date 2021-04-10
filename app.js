@@ -1,5 +1,14 @@
+//iXsOQ59uriT1HwoM
+
 const { json } = require('express');
 const express = require('express');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb+srv://groupomania.7zliy.mongodb.net/Groupomania',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const userRoutes = require('./routes/user');
 const threadRoutes = require('./routes/thread');

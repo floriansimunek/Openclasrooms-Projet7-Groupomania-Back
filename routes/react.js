@@ -27,3 +27,5 @@ router.put('/:reactId',(req, res, next) => {
 router.delete('/:reactId',(req, res, next) => {
 
 });
+
+module.exports = router;

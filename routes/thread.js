@@ -58,3 +58,5 @@ router.delete('/:threadId/message/:messageId',(req, res, next) => {
 router.get('/:threadId/message/gif',(req, res, next) => {
 
 });
+
+module.exports = router;
