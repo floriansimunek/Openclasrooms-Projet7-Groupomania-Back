@@ -2,6 +2,8 @@ const { json } = require('express');
 const express = require('express');
 
 const userRoutes = require('./routes/user');
+const threadRoutes = require('./routes/thread');
+const reactRoutes = require('./routes/react');
 
 const app = express();
 
@@ -13,5 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/user', userRoutes);
+app.use('/api/thread', threadRoutes);
+app.use('/api/react', reactRoutes);
 
 module.exports = app;
