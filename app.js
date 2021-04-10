@@ -1,10 +1,9 @@
 //iXsOQ59uriT1HwoM
-
 const { json } = require('express');
 const express = require('express');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://groupomania.7zliy.mongodb.net/Groupomania',
+mongoose.connect('mongodb+srv://Florian:iXsOQ59uriT1HwoM@groupomania.7zliy.mongodb.net/Groupomania?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
