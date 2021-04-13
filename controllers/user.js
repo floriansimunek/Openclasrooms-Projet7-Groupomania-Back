@@ -126,10 +126,10 @@ exports.createUser = (req, res, next) => {
             user.save()
                 .then(() => res.status(201).json({
                     user: {
-                        //"userId": _id,
+                        userId: "_id",
                         username: req.body.username,
                         email: req.body.email,
-                        createdAt: req.body.createdAt
+                        createdAt: "DATE"
                     }
                 }))
                 .catch(error => res.status(400).json({ error }));
