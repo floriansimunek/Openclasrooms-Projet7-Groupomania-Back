@@ -1,62 +1,18 @@
 const express = require('express');
 const router = express.Router();
 
-//thread - post
-router.post('/',(req, res, next) => {
+const threadCtrl = require('../controllers/thread');
 
-});
-
-
-//thread - get
-router.get('/',(req, res, next) => {
-
-});
-
-
-//threadId - get
-router.get('/:threadId',(req, res, next) => {
-
-});
-
-//threadId - put
-router.put('/:threadId',(req, res, next) => {
-
-});
-
-//threadId - delete
-router.delete('/:threadId',(req, res, next) => {
-
-});
-
-//message - post
-router.post('/:threadId/message',(req, res, next) => {
-
-});
-
-
-//message - get
-router.get('/:threadId/message',(req, res, next) => {
-
-});
-
-//messageId - get
-router.get('/:threadId/message/:messageId',(req, res, next) => {
-
-});
-
-//messageId - put
-router.put('/:threadId/message/:messageId',(req, res, next) => {
-
-});
-
-//messageId - delete
-router.delete('/:threadId/message/:messageId',(req, res, next) => {
-
-});
-
-//gif - get
-router.get('/:threadId/message/gif',(req, res, next) => {
-
-});
+router.post('/', threadCtrl.postThread); //thread - post
+router.get('/', threadCtrl.getAllThread); //thread - get
+router.get('/:threadId', threadCtrl.getThread); //threadId - get
+router.put('/:threadId', threadCtrl.modifyThread); //threadId - put
+router.delete('/:threadId', threadCtrl.deleteThread); //threadId - delete
+router.post('/:threadId/message', threadCtrl.postMessage); //message - post
+router.get('/:threadId/message', threadCtrl.getAllMessage); //message - get
+router.get('/:threadId/message/:messageId', threadCtrl.getMessage); //messageId - get
+router.put('/:threadId/message/:messageId', threadCtrl.modifyMessage); //messageId - put
+router.delete('/:threadId/message/:messageId', threadCtrl.deleteMessage); //messageId - delete
+router.get('/:threadId/message/gif', threadCtrl.postGif); //gif - get
 
 module.exports = router;
