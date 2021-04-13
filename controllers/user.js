@@ -46,6 +46,31 @@ const validateEmail = (email) => {
     return true;
 }
 
+//password validation system
+const validatePassword = (password, confirmPassword) => {
+    if(!password || !confirmPassword) {
+        return {
+            code: 400,
+            message: `Merci de saisir un mot de passe et de le confirmer`
+        }
+    } else if (typeof password !== 'string' || typeof confirmPassword !== 'string') {
+        return {
+            code: 400,
+            message: `Merci de saisir un mot de passe valide (chaîne de caractères)`
+        }
+    } else if (password.length <= 5 || confirmPassword.length <= 5) {
+        return {
+            code: 400,
+            message: 'Merci de saisir un mot de passe de plus de 6 caractères ou plus'
+        }
+    } else if (password !== confirmPassword) {
+        return {
+            code: 400,
+            message: `Les deux mots de passes ne correspondent pas`
+        }
+    }
+}
+
 exports.createUser = (req, res, next) => {
     //username validation
     const usernameValidation = validateUsername(req.body.username);
@@ -57,6 +82,12 @@ exports.createUser = (req, res, next) => {
     const emailValidation = validateEmail(req.body.email);
     if(emailValidation.message) {
         return res.status(emailValidation.code).json(emailValidation);
+    }
+
+    //password validation
+    const passwordValidation = validatePassword(req.body.password, req.body.confirmPassword);
+    if(passwordValidation.message) {
+        return res.status(passwordValidation.code).json(passwordValidation);
     }
 
     const user = new User({
