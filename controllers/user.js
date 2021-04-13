@@ -20,7 +20,7 @@ exports.loginUser = (req, res, next) => {
                         userId: user._id,
                         username: req.body.username,
                         email: req.body.email,
-                        token: jwt.sign(
+                        accessToken: jwt.sign(
                             { userId: user._id },
                             'RANDOM_TOKEN_SECRET',
                             { expiresIn: '24h' }
@@ -134,8 +134,13 @@ exports.createUser = (req, res, next) => {
                         userId: user._id,
                         username: req.body.username,
                         email: req.body.email,
-                        createdAt: "DATE"
-                    }
+                        createdAt: user.createdAt
+                    },
+                    accessToken: jwt.sign(
+                        { userId: user._id },
+                        'RANDOM_TOKEN_SECRET',
+                        { expiresIn: '24h' }
+                    )
                 }))
                 .catch(error => res.status(400).json({ error }));
         })
