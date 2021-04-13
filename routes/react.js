@@ -1,31 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-//react - post
-router.post('/',(req, res, next) => {
+const reactCtrl = require('../controllers/react');
 
-});
-
-
-//react - get
-router.get('/',(req, res, next) => {
-
-});
-
-
-//reactId - get
-router.get('/:reactId',(req, res, next) => {
-
-});
-
-//reactId - put
-router.put('/:reactId',(req, res, next) => {
-
-});
-
-//reactId - delete
-router.delete('/:reactId',(req, res, next) => {
-
-});
+router.post('/', reactCtrl.postReact); //react - post
+router.get('/', reactCtrl.getAllReact); //react - get
+router.get('/:reactId', reactCtrl.getReact); //reactId - get
+router.put('/:reactId', reactCtrl.modifyReact); //reactId - put
+router.delete('/:reactId', reactCtrl.deleteReact); //reactId - delete
 
 module.exports = router;
