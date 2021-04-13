@@ -4,7 +4,28 @@ const User = require('../models/User');
 
 exports.getAllUsers = (req, res, next) => {};
 
-exports.loginUser = (req, res, next) => {};
+exports.loginUser = (req, res, next) => {
+    User.findOne({ email: req.body.email })
+        .then(user => {
+            if(!user) {
+                return res.status(401).json({ error: 'Utilisateur non trouvé !'});
+            }
+            bcrypt.compare(req.body.password, user.password)
+                .then(valid => {
+                    if(!valid) {
+                        return res.status(401).json({ error: 'Mot de passe incorrect !'}); 
+                    }
+                    res.status(200).json({ 
+                        userId: _id,
+                        username: req.body.username,
+                        email: req.body.email,
+                        token: 'TOKEN'
+                    });
+                })
+                .catch(error => res.status(500).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
+};
 
 //username validation system
 const validateUsername = (username) => {
@@ -93,16 +114,24 @@ exports.createUser = (req, res, next) => {
         return res.status(passwordValidation.code).json(passwordValidation);
     }
 
-    
+
     bcrypt.hash(req.body.password, 10)
         .then(hash => { 
             const user = new User({
                 username: req.body.username,
                 email: req.body.email,
-                password: hash
+                password: hash,
+                createdAt: Date.now()
             });
             user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
+                .then(() => res.status(201).json({
+                    user: {
+                        //"userId": _id,
+                        username: req.body.username,
+                        email: req.body.email,
+                        createdAt: req.body.createdAt
+                    }
+                }))
                 .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
