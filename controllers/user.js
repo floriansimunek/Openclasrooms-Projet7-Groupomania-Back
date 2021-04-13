@@ -4,6 +4,7 @@ exports.getAllUsers = (req, res, next) => {};
 
 exports.loginUser = (req, res, next) => {};
 
+//username validation system
 const validateUsername = (username) => {
     if(!username) {
         return {
@@ -24,10 +25,38 @@ const validateUsername = (username) => {
     return true;
 }
 
+//email validation system
+const validateEmail = (email) => {
+    if(!email) {
+        return {
+            code: 400,
+            message: `Merci de saisir une adresse mail`
+        }
+    } else if (typeof email !== 'string') {
+        return {
+            code: 400,
+            message: `Merci de saisir une adresse mail valide (chaîne de caractères au format example@domaine.ext)`
+        }
+    } else if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))) {
+        return {
+            code: 400,
+            message: `Merci de saisir une adresse mail valide (chaîne de caractères au format example@domaine.ext)`
+        }
+    }
+    return true;
+}
+
 exports.createUser = (req, res, next) => {
+    //username validation
     const usernameValidation = validateUsername(req.body.username);
     if (usernameValidation.message) {
         return res.status(usernameValidation.code).json(usernameValidation);
+    }
+
+    //email validation
+    const emailValidation = validateEmail(req.body.email);
+    if(emailValidation.message) {
+        return res.status(emailValidation.code).json(emailValidation);
     }
 
     const user = new User({
