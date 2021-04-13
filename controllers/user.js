@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const User = require('../models/User');
 
 exports.getAllUsers = (req, res, next) => {};
@@ -69,6 +71,7 @@ const validatePassword = (password, confirmPassword) => {
             message: `Les deux mots de passes ne correspondent pas`
         }
     }
+    return true;
 }
 
 exports.createUser = (req, res, next) => {
@@ -90,12 +93,19 @@ exports.createUser = (req, res, next) => {
         return res.status(passwordValidation.code).json(passwordValidation);
     }
 
-    const user = new User({
-        ...req.body
-    });
-    user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
-        .catch(error => res.status(400).json({ error }));
+    
+    bcrypt.hash(req.body.password, 10)
+        .then(hash => { 
+            const user = new User({
+                username: req.body.username,
+                email: req.body.email,
+                password: hash
+            });
+            user.save()
+                .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
 };
 
 exports.getUserProfile = (req, res, next) => {};
