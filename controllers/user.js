@@ -4,8 +4,32 @@ exports.getAllUsers = (req, res, next) => {};
 
 exports.loginUser = (req, res, next) => {};
 
+const validateUsername = (username) => {
+    if(!username) {
+        return {
+            code: 400,
+            message: `Merci de préciser un nom d'utilisateur`
+        }
+    } else if (typeof username !== 'string') { 
+        return {
+            code: 400,
+            message: `Merci de préciser un nom d'utilisateur valide (chaîne de caractères)`
+        }
+    } else if (username.length <= 1) {
+        return {
+            code: 400,
+            message: `Merci de préciser un nom d'utilisateur valide (2 caractères ou plus)`
+        }
+    }
+    return true;
+}
+
 exports.createUser = (req, res, next) => {
-    //delete req.body.id;
+    const usernameValidation = validateUsername(req.body.username);
+    if (usernameValidation.message) {
+        return res.status(usernameValidation.code).json(usernameValidation);
+    }
+
     const user = new User({
         ...req.body
     });
