@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const threadCtrl = require('../controllers/thread');
+const auth = require('../middleware/auth');
 
 router.post('/', auth, threadCtrl.postThread); //thread - post
 router.get('/', auth, threadCtrl.getAllThread); //thread - get
