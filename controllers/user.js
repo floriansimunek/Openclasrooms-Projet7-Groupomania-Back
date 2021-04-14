@@ -155,7 +155,14 @@ exports.getUserProfile = (req, res, next) => {};
 
 exports.getUser = (req, res, next) => {
     User.findOne({ _id: req.params.userId})
-        .then(user => res.status(200).json(user))
+        .then(user => res.status(200).json({
+            user: {
+                userId: user._id,
+                username: user.username,
+                email: user.email,
+                createdAt: user.createdAt
+            }
+        }))
         .catch(error => res.status(404).json({ error }));
 };
 
