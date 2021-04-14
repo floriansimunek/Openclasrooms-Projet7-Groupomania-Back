@@ -2,10 +2,16 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
 const User = require('../models/User');
+const fieldsFilters = {
+    User: {
+        getAllUsers: ["_id", "username", "email", "createdAt"],
+        getUser: ["_id", "username", "email", "createdAt"]
+    }
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getAllUsers = (req, res, next) => {
-    User.find()
+    User.find({}, fieldsFilters.User.getAllUsers)
         .then(users => res.status(200).json(users))
         .catch(error => res.status(400).json({ error }));
 };
@@ -159,28 +165,29 @@ exports.getUserProfile = (req, res, next) => {};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getUser = (req, res, next) => {
-    User.findOne({ _id: req.params.userId})
-        .then(user => res.status(200).json({
-            user: {
-                userId: user._id,
-                username: user.username,
-                email: user.email,
-                createdAt: user.createdAt
-            }
-        }))
+    User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
+        .then(user => res.status(200).json(user))
         .catch(error => res.status(404).json({ error }));
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.modifyUser = (req, res, next) => {
     User.updateOne({ _id: req.params.userId }, { ...req.body, _id: req.params.userId })
-        .then(() => res.status(200).json({ message: 'User modifié !'}))
+        .then(() => {
+            User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
+                .then(user => res.status(200).json(user))
+                .catch(error => res.status(404).json({ error }));
+        })
         .catch(error => res.status(400).json({ error }));
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteUser = (req, res, next) => {
-    User.deleteOne({ _id: req.params.userId })
-        .then(() => res.status(200).json({ message: 'User supprimé !' }))
+    User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
+        .then(user => {
+            res.status(200).json(user)
+            User.deleteOne({ _id: req.params.userId })
+                .catch(error => res.status(404).json({ error }));
+        })
         .catch(error => res.status(404).json({ error }));
 };
