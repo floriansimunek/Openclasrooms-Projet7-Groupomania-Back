@@ -46,7 +46,7 @@ exports.loginUser = (req, res, next) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //username validation system
-const validateUsername = (username) => {
+const validateUsername = (username, required) => {
     if(!username) {
         return {
             code: 400,
@@ -67,7 +67,7 @@ const validateUsername = (username) => {
 }
 
 //email validation system
-const validateEmail = (email) => {
+const validateEmail = (email, required) => {
     if(!email) {
         return {
             code: 400,
@@ -88,7 +88,7 @@ const validateEmail = (email) => {
 }
 
 //password validation system
-const validatePassword = (password, confirmPassword) => {
+const validatePassword = (password, confirmPassword, required) => { 
     if(!password || !confirmPassword) {
         return {
             code: 400,
@@ -113,10 +113,10 @@ const validatePassword = (password, confirmPassword) => {
     return true;
 }
 
-const validateUserInputs = (username, email, password, confirmPassword, res) => {
-    const usernameValidation = validateUsername(username);
-    const emailValidation = validateEmail(email);
-    const passwordValidation = validatePassword(password, confirmPassword);
+const validateUserInputs = (username, email, password, confirmPassword, res, required = true) => {
+    const usernameValidation = validateUsername(username, required);
+    const emailValidation = validateEmail(email, required);
+    const passwordValidation = validatePassword(password, confirmPassword, required);
 
     if (usernameValidation.message) {
         return res.status(usernameValidation.code).json(usernameValidation);
@@ -125,28 +125,9 @@ const validateUserInputs = (username, email, password, confirmPassword, res) => 
     } else if(passwordValidation.message) {
         return res.status(passwordValidation.code).json(passwordValidation);
     }
-
 }
 
 exports.createUser = (req, res, next) => {
-    //username validation
-    /*const usernameValidation = validateUsername(req.body.username);
-    if (usernameValidation.message) {
-        return res.status(usernameValidation.code).json(usernameValidation);
-    }
-
-    //email validation
-    const emailValidation = validateEmail(req.body.email);
-    if(emailValidation.message) {
-        return res.status(emailValidation.code).json(emailValidation);
-    }
-
-    //password validation
-    const passwordValidation = validatePassword(req.body.password, req.body.confirmPassword);
-    if(passwordValidation.message) {
-        return res.status(passwordValidation.code).json(passwordValidation);
-    }*/
-
     validateUserInputs(req.body.username, req.body.email, req.body.password, req.body.confirmPassword, res);
 
     bcrypt.hash(req.body.password, 10)
@@ -188,6 +169,8 @@ exports.getUser = (req, res, next) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.modifyUser = (req, res, next) => {
+    validateUserInputs(req.body.username, req.body.email, req.body.password, req.body.confirmPassword, res, false);
+
     User.updateOne({ _id: req.params.userId }, { ...req.body, _id: req.params.userId })
         .then(() => {
             User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
