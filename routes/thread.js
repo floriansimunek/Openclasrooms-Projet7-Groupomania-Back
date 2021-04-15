@@ -5,7 +5,7 @@ const threadCtrl = require('../controllers/thread');
 const auth = require('../middleware/auth');
 
 router.post('/', /* auth, */ threadCtrl.createThread); //thread - post
-router.get('/', /* auth, */ threadCtrl.getAllThread); //thread - get
+router.get('/', /* auth, */ threadCtrl.getAllThreads); //thread - get
 router.get('/:threadId', /* auth, */ threadCtrl.getThread); //threadId - get
 router.put('/:threadId', /* auth, */ threadCtrl.modifyThread); //threadId - put
 router.delete('/:threadId', /* auth, */ threadCtrl.deleteThread); //threadId - delete
