@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const userSchema = mongoose.Schema({
+const threadSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     createdBy: { type: String },
     createdAt: { type: Date }
 });
 
-userSchema.plugin(uniqueValidator);
+threadSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('Thread', userSchema);
+module.exports = mongoose.model('Thread', threadSchema);

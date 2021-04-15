@@ -1,4 +1,5 @@
 const Thread = require('../models/Thread');
+const Message = require('../models/Message');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.createThread = (req, res, next) => {
@@ -58,7 +59,24 @@ exports.deleteThread = (req, res, next) => {
 
 //messages
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.postMessage = (req, res, next) => {};
+exports.createMessage = (req, res, next) => {
+    const message = new Message({
+        subject: req.body.subject,
+        message: req.body.message,
+        createdAt: Date.now()
+    });
+    
+    message.save()
+        .then(() => res.status(201).json({
+            message: {
+                messageId: message._id,
+                subject: req.body.subject,
+                message: req.body.message,
+                createdAt: message.createdAt
+            }
+        }))
+        .catch(error => res.status(400).json({ error }));
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getAllMessage = (req, res, next) => {};
