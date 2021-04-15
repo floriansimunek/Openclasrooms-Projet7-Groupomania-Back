@@ -93,7 +93,15 @@ exports.getMessage = (req, res, next) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.modifyMessage = (req, res, next) => {};
+exports.modifyMessage = (req, res, next) => {
+    Message.updateOne({ _id: req.params.messageId }, { ...req.body, _id: req.params.messageId })
+        .then(() => {
+            Message.findOne({ _id: req.params.messageId })
+                .then(message => res.status(200).json(message))
+                .catch(error => res.status(404).json({ error }));
+        })
+        .catch(error => res.status(400).json({ error }));
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteMessage = (req, res, next) => {};
