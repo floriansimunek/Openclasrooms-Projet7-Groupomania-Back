@@ -46,7 +46,15 @@ exports.modifyThread = (req, res, next) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.deleteThread = (req, res, next) => {};
+exports.deleteThread = (req, res, next) => {
+    Thread.findOne({ _id: req.params.threadId })
+        .then(thread => {
+            res.status(200).json(thread)
+            Thread.deleteOne({ _id: req.params.threadId })
+                .catch(error => res.status(404).json({ error }));
+        })
+        .catch(error => res.status(404).json({ error }));
+};
 
 //messages
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
