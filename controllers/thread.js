@@ -104,7 +104,15 @@ exports.modifyMessage = (req, res, next) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.deleteMessage = (req, res, next) => {};
+exports.deleteMessage = (req, res, next) => {
+    Message.findOne({ _id: req.params.messageId })
+        .then(message => {
+            res.status(200).json(message)
+            Message.deleteOne({ _id: req.params.messageId })
+                .catch(error => res.status(404).json({ error }));
+        })
+        .catch(error => res.status(404).json({ error }));
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.postGif = (req, res, next) => {};
