@@ -113,9 +113,24 @@ const validatePassword = (password, confirmPassword) => {
     return true;
 }
 
+const validateUserInputs = (username, email, password, confirmPassword, res) => {
+    const usernameValidation = validateUsername(username);
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password, confirmPassword);
+
+    if (usernameValidation.message) {
+        return res.status(usernameValidation.code).json(usernameValidation);
+    } else if(emailValidation.message) {
+        return res.status(emailValidation.code).json(emailValidation);
+    } else if(passwordValidation.message) {
+        return res.status(passwordValidation.code).json(passwordValidation);
+    }
+
+}
+
 exports.createUser = (req, res, next) => {
     //username validation
-    const usernameValidation = validateUsername(req.body.username);
+    /*const usernameValidation = validateUsername(req.body.username);
     if (usernameValidation.message) {
         return res.status(usernameValidation.code).json(usernameValidation);
     }
@@ -130,8 +145,9 @@ exports.createUser = (req, res, next) => {
     const passwordValidation = validatePassword(req.body.password, req.body.confirmPassword);
     if(passwordValidation.message) {
         return res.status(passwordValidation.code).json(passwordValidation);
-    }
+    }*/
 
+    validateUserInputs(req.body.username, req.body.email, req.body.password, req.body.confirmPassword, res);
 
     bcrypt.hash(req.body.password, 10)
         .then(hash => { 
