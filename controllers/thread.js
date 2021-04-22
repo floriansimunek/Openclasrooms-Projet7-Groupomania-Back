@@ -61,6 +61,7 @@ exports.deleteThread = (req, res, next) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.createMessage = (req, res, next) => {
     const message = new Message({
+        threadId: req.params.threadId,
         subject: req.body.subject,
         message: req.body.message,
         createdAt: Date.now()
@@ -69,6 +70,7 @@ exports.createMessage = (req, res, next) => {
     message.save()
         .then(() => res.status(201).json({
             message: {
+                threadId: req.params.threadId,
                 messageId: message._id,
                 subject: req.body.subject,
                 message: req.body.message,

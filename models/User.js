@@ -9,6 +9,6 @@ const userSchema = mongoose.Schema({
     createdAt: { type: Date }
 });
 
-userSchema.plugin(uniqueValidator, { message: `L'adresse mail existe déjà, elle doit être unique !` });
+userSchema.plugin(uniqueValidator, { message: `L'adresse mail {VALUE} existe déjà, elle doit être unique !` });
 
 module.exports = mongoose.model('User', userSchema);

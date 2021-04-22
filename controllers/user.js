@@ -5,7 +5,8 @@ const User = require('../models/User');
 const fieldsFilters = {
     User: {
         getAllUsers: ["_id", "username", "email", "createdAt"],
-        getUser: ["_id", "username", "email", "createdAt"]
+        getUser: ["_id", "username", "email", "createdAt"],
+        getAllEmail: ["email"]
     }
 }
 
@@ -197,7 +198,7 @@ exports.modifyUser = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
     User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
         .then(user => {
-            res.status(200).json(user)
+            res.status(200).json(user);
             User.deleteOne({ _id: req.params.userId })
                 .catch(error => res.status(404).json({ error }));
         })
