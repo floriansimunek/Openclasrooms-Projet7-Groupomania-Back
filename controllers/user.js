@@ -47,7 +47,7 @@ exports.loginUser = (req, res, next) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //username validation system
 const validateUsername = (username, required) => {
-    if(!username) {
+    if(required && !username) {
         return {
             code: 400,
             message: `Merci de préciser un nom d'utilisateur`
@@ -68,7 +68,7 @@ const validateUsername = (username, required) => {
 
 //email validation system
 const validateEmail = (email, required) => {
-    if(!email) {
+    if(required && !email) {
         return {
             code: 400,
             message: `Merci de saisir une adresse mail`
@@ -89,7 +89,7 @@ const validateEmail = (email, required) => {
 
 //password validation system
 const validatePassword = (password, confirmPassword, required) => { 
-    if(!password || !confirmPassword) {
+    if(required && (!password || !confirmPassword)) {
         return {
             code: 400,
             message: `Merci de saisir un mot de passe et de le confirmer`
@@ -171,13 +171,26 @@ exports.getUser = (req, res, next) => {
 exports.modifyUser = (req, res, next) => {
     validateUserInputs(req.body.username, req.body.email, req.body.password, req.body.confirmPassword, res, false);
 
-    User.updateOne({ _id: req.params.userId }, { ...req.body, _id: req.params.userId })
-        .then(() => {
-            User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
-                .then(user => res.status(200).json(user))
-                .catch(error => res.status(404).json({ error }));
+    bcrypt.hash(req.body.password, 10)
+        .then(hash => {
+            delete req.body.confirmPassword;
+            User.updateOne({ 
+                _id: req.params.userId 
+            }, 
+            { 
+                userId: req.body._id,
+                username: req.body.username,
+                email: req.body.email,
+                password: hash, 
+                _id: req.params.userId 
+            })
+                .then(() => {
+                    User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
+                        .then(user => res.status(200).json(user))
+                        .catch(error => res.status(404).json({ error }));
+                })
+                .catch(error => res.status(400).json({ error }));
         })
-        .catch(error => res.status(400).json({ error }));
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
