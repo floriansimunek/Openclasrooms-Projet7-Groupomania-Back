@@ -159,7 +159,14 @@ exports.createUser = (req, res, next) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.getUserProfile = (req, res, next) => {};
+exports.getUserProfile = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.decode(token);
+    const {userId} = decodedToken; // const userId = decodedToken.userId;
+    User.findOne({ _id: userId }, fieldsFilters.User.getUser)
+        .then(user => res.status(200).json(user))
+        .catch(error => res.status(404).json({ error }));
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getUser = (req, res, next) => {
