@@ -35,7 +35,7 @@ exports.loginUser = (req, res, next) => {
                         email: req.body.email,
                         accessToken: jwt.sign(
                             { userId: user._id },
-                            'RANDOM_TOKEN_SECRET',
+                            process.env.RANDOM_SECRET_TOKEN,
                             { expiresIn: '24h' }
                         )
                     });
@@ -149,7 +149,7 @@ exports.createUser = (req, res, next) => {
                     },
                     accessToken: jwt.sign(
                         { userId: user._id },
-                        'RANDOM_TOKEN_SECRET',
+                        process.env.RANDOM_SECRET_TOKEN,
                         { expiresIn: '24h' }
                     )
                 }))
@@ -161,7 +161,7 @@ exports.createUser = (req, res, next) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getUserProfile = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.decode(token);
+    const decodedToken = jwt.verify(token, process.env.RANDOM_SECRET_TOKEN);
     const {userId} = decodedToken; // const userId = decodedToken.userId;
     User.findOne({ _id: userId }, fieldsFilters.User.getUser)
         .then(user => res.status(200).json(user))
