@@ -17,13 +17,17 @@ exports.postReact = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.getAllReact = (req, res, next) => {
+exports.getAllReacts = (req, res, next) => {
     React.find()
         .then(reacts => res.status(200).json(reacts))
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.getReact = (req, res, next) => {};
+exports.getReact = (req, res, next) => {
+    React.findOne({ _id: req.params.reactId })
+        .then(react => res.status(200).json(react))
+        .catch(error => res.status(404).json({ error }));
+};
 
 exports.modifyReact = (req, res, next) => {};
 
