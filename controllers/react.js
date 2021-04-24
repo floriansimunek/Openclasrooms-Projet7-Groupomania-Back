@@ -31,4 +31,12 @@ exports.getReact = (req, res, next) => {
 
 exports.modifyReact = (req, res, next) => {};
 
-exports.deleteReact = (req, res, next) => {};
+exports.deleteReact = (req, res, next) => {
+    React.findOne({ _id: req.params.reactId })
+        .then(react => {
+            res.status(200).json(react)
+            React.deleteOne({ _id: req.params.reactId })
+                .catch(error => res.status(404).json({ error }));
+        })
+        .catch(error => res.status(404).json({ error }));
+};
