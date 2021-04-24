@@ -1,11 +1,17 @@
+const jwt = require('jsonwebtoken');
 const Thread = require('../models/Thread');
 const Message = require('../models/Message');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.createThread = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.RANDOM_SECRET_TOKEN);
+    const {userId} = decodedToken; // const userId = decodedToken.userId;
+
     const thread = new Thread({
         name: req.body.name,
         description: req.body.description,
+        createBy: userId,
         createdAt: Date.now()
     });
     
@@ -15,6 +21,7 @@ exports.createThread = (req, res, next) => {
                 threadId: thread._id,
                 name: req.body.name,
                 description: req.body.description,
+                createdBy: userId,
                 createdAt: thread.createdAt
             }
         }))

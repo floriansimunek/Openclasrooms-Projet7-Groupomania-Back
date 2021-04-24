@@ -1,8 +1,13 @@
+const jwt = require('jsonwebtoken');
 const React = require('../models/React');
 
 exports.postReact = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.RANDOM_SECRET_TOKEN);
+    const {userId} = decodedToken; // const userId = decodedToken.userId;
+    
     const react = new React({
-        createdBy: req.body.userId,
+        createdBy: userId,
         createdAt: Date.now()
     });
     
@@ -10,7 +15,7 @@ exports.postReact = (req, res, next) => {
         .then(() => res.status(201).json({
             react: {
                 reactId: react._id,
-                createdBy: req.body.userId,
+                createdBy: userId,
                 createdAt: react.createdAt
             }
         }))
