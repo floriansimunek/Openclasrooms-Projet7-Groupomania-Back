@@ -17,7 +17,11 @@ exports.postReact = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
-exports.getAllReact = (req, res, next) => {};
+exports.getAllReact = (req, res, next) => {
+    React.find()
+        .then(reacts => res.status(200).json(reacts))
+        .catch(error => res.status(400).json({ error }));
+};
 
 exports.getReact = (req, res, next) => {};
 
