@@ -28,6 +28,6 @@ app.use(express.json());
 
 app.use('/api/user', userRoutes);
 app.use('/api/thread', threadRoutes);
-app.use('/api/react', reactRoutes);
+app.use('/api/thread', reactRoutes);
 
 module.exports = app;

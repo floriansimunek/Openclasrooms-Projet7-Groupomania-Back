@@ -7,6 +7,9 @@ exports.postReact = (req, res, next) => {
     const {userId} = decodedToken; // const userId = decodedToken.userId;
     
     const react = new React({
+        type: req.body.type,
+        threadId: req.params.threadId,
+        messageId: req.params.messageId,
         createdBy: userId,
         createdAt: Date.now()
     });
@@ -15,6 +18,9 @@ exports.postReact = (req, res, next) => {
         .then(() => res.status(201).json({
             react: {
                 reactId: react._id,
+                threadId: req.params.threadId,
+                messageId: req.params.messageId,
+                type: req.body.type,
                 createdBy: userId,
                 createdAt: react.createdAt
             }
