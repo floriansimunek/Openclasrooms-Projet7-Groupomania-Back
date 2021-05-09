@@ -7,6 +7,10 @@ const fieldsFilters = {
     getThread: ["_id", "userId", "name", "description", "createdAt"],
     getAllThreads: ["_id", "userId", "name", "description", "createdAt"],
   },
+  Message: {
+    getMessage: [],
+    getAllMessages: [],
+  },
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +116,7 @@ exports.createMessage = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getAllMessages = (req, res) => {
-  Message.find()
+  Message.find({ threadId: req.params.threadId })
     .then((messages) => res.status(200).json(messages))
     .catch((error) => res.status(400).json({ error }));
 };
