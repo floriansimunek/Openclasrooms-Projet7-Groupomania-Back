@@ -4,6 +4,7 @@ const Message = require("../models/Message");
 
 const fieldsFilters = {
   Thread: {
+    getThread: ["_id", "userId", "name", "description", "createdAt"],
     getAllThreads: ["_id", "userId", "name", "description", "createdAt"],
   },
 };
@@ -46,7 +47,7 @@ exports.getAllThreads = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getThread = (req, res) => {
-  Thread.findOne({ _id: req.params.threadId })
+  Thread.findOne({ _id: req.params.threadId }, fieldsFilters.Thread.getThread)
     .then((thread) => res.status(200).json(thread))
     .catch((error) => res.status(404).json({ error }));
 };
@@ -67,7 +68,7 @@ exports.modifyThread = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteThread = (req, res) => {
-  Thread.findOne({ _id: req.params.threadId })
+  Thread.findOne({ _id: req.params.threadId }, fieldsFilters.Thread.getThread)
     .then((thread) => {
       res.status(200).json(thread);
       Thread.deleteOne({ _id: req.params.threadId }).catch((error) =>
