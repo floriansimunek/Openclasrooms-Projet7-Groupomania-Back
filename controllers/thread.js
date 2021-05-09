@@ -8,8 +8,22 @@ const fieldsFilters = {
     getAllThreads: ["_id", "userId", "name", "description", "createdAt"],
   },
   Message: {
-    getMessage: [],
-    getAllMessages: [],
+    getMessage: [
+      "_id",
+      "threadId",
+      "userId",
+      "subject",
+      "message",
+      "createdAt",
+    ],
+    getAllMessages: [
+      "_id",
+      "threadId",
+      "userId",
+      "subject",
+      "message",
+      "createdAt",
+    ],
   },
 };
 
@@ -102,9 +116,9 @@ exports.createMessage = (req, res) => {
     .then(() =>
       res.status(201).json({
         message: {
+          messageId: message._id,
           threadId: req.params.threadId,
           userId: userId,
-          messageId: message._id,
           subject: req.body.subject,
           message: req.body.message,
           createdAt: message.createdAt,
@@ -116,14 +130,20 @@ exports.createMessage = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getAllMessages = (req, res) => {
-  Message.find({ threadId: req.params.threadId })
+  Message.find(
+    { threadId: req.params.threadId },
+    fieldsFilters.Message.getAllMessages
+  )
     .then((messages) => res.status(200).json(messages))
     .catch((error) => res.status(400).json({ error }));
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getMessage = (req, res) => {
-  Message.findOne({ _id: req.params.messageId })
+  Message.findOne(
+    { _id: req.params.messageId },
+    fieldsFilters.Message.getMessage
+  )
     .then((message) => res.status(200).json(message))
     .catch((error) => res.status(404).json({ error }));
 };
