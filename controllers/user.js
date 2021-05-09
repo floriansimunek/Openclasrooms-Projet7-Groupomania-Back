@@ -6,7 +6,7 @@ const fieldsFilters = {
     User: {
         getAllUsers: ["_id", "username", "email", "createdAt"],
         getUser: ["_id", "username", "email", "createdAt"],
-        getAllEmail: ["email"]
+        getAllId: ["_id"]
     }
 }
 
@@ -172,7 +172,7 @@ exports.getUserProfile = (req, res, next) => {
 exports.getUser = (req, res, next) => {
     User.findOne({ _id: req.params.userId }, fieldsFilters.User.getUser)
         .then(user => res.status(200).json(user))
-        .catch(error => res.status(404).json({ error }));
+        .catch(error => res.status(404).json({ error }));  
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
