@@ -174,5 +174,19 @@ exports.deleteMessage = (req, res) => {
     .catch((error) => res.status(404).json({ error }));
 };
 
+// TODO: post gif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-exports.postGif = (req, res) => {};
+exports.postGif = (req, res) => {
+  const gif = JSON.parse(req.body.thing);
+  delete gif._id;
+  const message = new Message({
+    ...gif,
+    imageUrl: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
+  });
+  message
+    .save()
+    .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+    .catch((error) => res.status(400).json({ error }));
+};
