@@ -14,6 +14,7 @@ const fieldsFilters = {
       "userId",
       "subject",
       "message",
+      "imageUrl",
       "createdAt",
     ],
     getAllMessages: [
@@ -22,6 +23,7 @@ const fieldsFilters = {
       "userId",
       "subject",
       "message",
+      "imageUrl",
       "createdAt",
     ],
   },
@@ -108,6 +110,7 @@ exports.createMessage = (req, res) => {
     userId: userId,
     subject: req.body.subject,
     message: req.body.message,
+    imageUrl: req.body.imageUrl,
     createdAt: Date.now(),
   });
 
@@ -121,6 +124,7 @@ exports.createMessage = (req, res) => {
           userId: userId,
           subject: req.body.subject,
           message: req.body.message,
+          imageUrl: req.body.imageUrl,
           createdAt: message.createdAt,
         },
       })
@@ -174,7 +178,6 @@ exports.deleteMessage = (req, res) => {
     .catch((error) => res.status(404).json({ error }));
 };
 
-// TODO: post gif
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.postGif = (req, res) => {
   res.status(201).json({
