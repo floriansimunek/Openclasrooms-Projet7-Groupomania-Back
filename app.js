@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 //bodyParser
 app.use(express.json());
 
-app.use("/gif", express.static(path.join(__dirname, "gif")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use("/api/user", userRoutes);
 app.use("/api/thread", threadRoutes);
