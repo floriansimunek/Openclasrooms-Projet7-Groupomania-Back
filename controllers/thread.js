@@ -107,6 +107,7 @@ exports.createMessage = (req, res) => {
 
   const message = new Message({
     threadId: req.params.threadId,
+    messageId: req.body.messageId,
     userId: userId,
     subject: req.body.subject,
     message: req.body.message,
@@ -119,7 +120,7 @@ exports.createMessage = (req, res) => {
     .then(() =>
       res.status(201).json({
         message: {
-          messageId: message._id,
+          messageId: req.body.messageId,
           threadId: req.params.threadId,
           userId: userId,
           subject: req.body.subject,
