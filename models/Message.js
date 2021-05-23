@@ -4,6 +4,7 @@ const uniqueValidator = require("mongoose-unique-validator");
 const messageSchema = mongoose.Schema({
   threadId: { type: String, required: true },
   userId: { type: String, required: true },
+  messageId: { type: String, required: false },
   subject: { type: String, required: true, unique: true },
   message: { type: String, required: true },
   imageUrl: { type: String, required: false },
