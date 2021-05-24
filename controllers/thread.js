@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Thread = require("../models/Thread");
 const Message = require("../models/Message");
+const React = require("../models/React");
 
 const fieldsFilters = {
   Thread: {
@@ -89,13 +90,32 @@ exports.modifyThread = (req, res) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//TODO: delete message & reacts with threadId
 exports.deleteThread = (req, res) => {
-  Thread.findOne({ _id: req.params.threadId }, fieldsFilters.Thread.getThread)
+  /*Thread.deleteOne({ _id: req.params.threadId })
     .then((thread) => {
-      res.status(200).json(thread);
-      Thread.deleteOne({ _id: req.params.threadId }).catch((error) =>
-        res.status(404).json({ error })
-      );
+      res.status(200).json({ thread });
+    })
+    .catch((error) => res.status(404).json({ error }));*/
+
+  React.deleteMany(
+    {
+      threadId: req.params.threadId,
+    },
+    {
+      messageId: req.params.messageId,
+    }
+  )
+    .then(() => {
+      Message.deleteMany({ threadId: req.params.threadId })
+        .then(() => {
+          Thread.deleteOne({ _id: req.params.threadId })
+            .then((thread) => {
+              res.status(200).json({ thread });
+            })
+            .catch((error) => res.status(404).json({ error }));
+        })
+        .catch((error) => res.status(404).json({ error }));
     })
     .catch((error) => res.status(404).json({ error }));
 };

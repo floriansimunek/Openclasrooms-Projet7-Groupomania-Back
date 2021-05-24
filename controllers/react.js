@@ -8,6 +8,7 @@ const fieldsFilters = {
       "type",
       "threadId",
       "messageId",
+      "userId",
       "createdBy",
       "createdAt",
     ],
