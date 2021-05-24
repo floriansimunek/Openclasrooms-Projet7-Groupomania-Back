@@ -90,14 +90,7 @@ exports.modifyThread = (req, res) => {
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: delete message & reacts with threadId
 exports.deleteThread = (req, res) => {
-  /*Thread.deleteOne({ _id: req.params.threadId })
-    .then((thread) => {
-      res.status(200).json({ thread });
-    })
-    .catch((error) => res.status(404).json({ error }));*/
-
   React.deleteMany(
     {
       threadId: req.params.threadId,
@@ -191,12 +184,24 @@ exports.modifyMessage = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteMessage = (req, res) => {
-  Message.findOne({ _id: req.params.messageId })
-    .then((message) => {
-      res.status(200).json(message);
-      Message.deleteOne({ _id: req.params.messageId }).catch((error) =>
-        res.status(404).json({ error })
-      );
+  React.deleteMany(
+    {
+      threadId: req.params.threadId,
+    },
+    {
+      messageId: req.params.messageId,
+    }
+  )
+    .then(() => {
+      Message.deleteMany({ messageId: req.params.messageId })
+        .then(() => {
+          Message.deleteOne({ _id: req.params.messageId })
+            .then((message) => {
+              res.status(200).json(message);
+            })
+            .catch((error) => res.status(404).json({ error }));
+        })
+        .catch((error) => res.status(404).json({ error }));
     })
     .catch((error) => res.status(404).json({ error }));
 };
