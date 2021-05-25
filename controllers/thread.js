@@ -3,34 +3,6 @@ const jwt = require("jsonwebtoken");
 const { Thread } = require("../models");
 const { Message } = require("../models");
 const { React } = require("../models");
-const fieldsFilters = {
-  Thread: {
-    getThread: ["_id", "userId", "name", "description", "createdAt"],
-    getAllThreads: ["_id", "userId", "name", "description", "createdAt"],
-  },
-  Message: {
-    getMessage: [
-      "_id",
-      "threadId",
-      "userId",
-      "messageId",
-      "subject",
-      "message",
-      "imageUrl",
-      "createdAt",
-    ],
-    getAllMessages: [
-      "_id",
-      "threadId",
-      "userId",
-      "messageId",
-      "subject",
-      "message",
-      "imageUrl",
-      "createdAt",
-    ],
-  },
-};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.createThread = (req, res) => {
