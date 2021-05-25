@@ -2,13 +2,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { User } = require("../models");
-const fieldsFilters = {
-  User: {
-    getAllUsers: ["_id", "username", "email", "createdAt"],
-    getUser: ["_id", "username", "email", "createdAt"],
-    getAllId: ["_id"],
-  },
-};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getAllUsers = (req, res, next) => {

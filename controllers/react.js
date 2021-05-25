@@ -1,19 +1,6 @@
 const jwt = require("jsonwebtoken");
 
 const { React } = require("../models");
-const fieldsFilters = {
-  React: {
-    getReacts: [
-      "_id",
-      "type",
-      "threadId",
-      "messageId",
-      "userId",
-      "createdBy",
-      "createdAt",
-    ],
-  },
-};
 
 exports.postReact = (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
@@ -43,20 +30,21 @@ exports.postReact = (req, res) => {
 };
 
 exports.getAllReacts = (req, res) => {
-  React.findAll(
-    { where: { threadId: req.params.threadId } },
-    { where: { messageId: req.params.messageId } }
-  )
+  React.findAll({
+    where: { messageId: req.params.messageId, threadId: req.params.threadId },
+  })
     .then((reacts) => res.status(200).json(reacts))
     .catch((error) => res.status(400).json({ error }));
 };
 
 exports.getReact = (req, res) => {
-  React.findOne(
-    { where: { _id: req.params.reactId } },
-    { where: { threadId: req.params.threadId } },
-    { where: { messageId: req.params.messageId } }
-  )
+  React.findOne({
+    where: {
+      _id: req.params.reactId,
+      threadId: req.params.threadId,
+      messageId: req.params.messageId,
+    },
+  })
     .then((react) => res.status(200).json(react))
     .catch((error) => res.status(404).json({ error }));
 };

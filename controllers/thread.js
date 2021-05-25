@@ -92,10 +92,9 @@ exports.modifyThread = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteThread = (req, res) => {
-  React.destroy(
-    { where: { threadId: req.params.threadId } },
-    { where: { messageId: req.params.messageId } }
-  )
+  React.destroy({
+    where: { threadId: req.params.threadId, messageId: req.params.messageId },
+  })
     .then(() => {
       Message.destroy({ where: { threadId: req.params.threadId } })
         .then(() => {
@@ -147,7 +146,7 @@ exports.createMessage = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getAllMessages = (req, res) => {
-  Message.findAll()
+  Message.findAll({ where: { threadId: req.params.threadId } })
     .then((messages) => res.status(200).json(messages))
     .catch((error) => res.status(400).json({ error }));
 };
@@ -179,10 +178,9 @@ exports.modifyMessage = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteMessage = (req, res) => {
-  React.destroy(
-    { where: { threadId: req.params.threadId } },
-    { where: { messageId: req.params.messageId } }
-  )
+  React.destroy({
+    where: { threadId: req.params.threadId, messageId: req.params.messageId },
+  })
     .then(() => {
       Message.findOne({ where: { _id: req.params.messageId } })
         .then((message) => {
