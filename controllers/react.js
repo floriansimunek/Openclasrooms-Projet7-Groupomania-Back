@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const React = require("../models/React");
 
+const { React } = require("../models");
 const fieldsFilters = {
   React: {
     getReacts: [
@@ -20,17 +20,14 @@ exports.postReact = (req, res) => {
   const decodedToken = jwt.verify(token, process.env.RANDOM_SECRET_TOKEN);
   const { userId } = decodedToken; // const userId = decodedToken.userId;
 
-  const react = new React({
+  React.create({
     type: req.body.type,
     threadId: req.params.threadId,
     messageId: req.params.messageId,
     userId: userId,
     createdAt: Date.now(),
-  });
-
-  react
-    .save()
-    .then(() =>
+  })
+    .then((react) =>
       res.status(201).json({
         react: {
           reactId: react._id,
@@ -46,28 +43,38 @@ exports.postReact = (req, res) => {
 };
 
 exports.getAllReacts = (req, res) => {
-  React.find(
-    { threadId: req.params.threadId, messageId: req.params.messageId },
-    fieldsFilters.React.getReacts
+  React.findAll(
+    { where: { threadId: req.params.threadId } },
+    { where: { messageId: req.params.messageId } }
   )
     .then((reacts) => res.status(200).json(reacts))
     .catch((error) => res.status(400).json({ error }));
 };
 
 exports.getReact = (req, res) => {
-  React.findOne({ _id: req.params.reactId }, fieldsFilters.React.getReacts)
+  React.findAll(
+    { where: { _id: req.params.reactId } },
+    { where: { threadId: req.params.threadId } },
+    { where: { messageId: req.params.messageId } }
+  )
     .then((react) => res.status(200).json(react))
     .catch((error) => res.status(404).json({ error }));
 };
 
 exports.modifyReact = (req, res) => {
-  React.updateOne(
-    { _id: req.params.reactId },
-    { ...req.body, _id: req.params.reactId },
-    fieldsFilters.React.getReacts
+  React.update(
+    {
+      type: req.body.type,
+      updatedAt: Date.now(),
+    },
+    {
+      where: {
+        _id: req.params.reactId,
+      },
+    }
   )
     .then(() => {
-      React.findOne({ _id: req.params.reactId })
+      React.findAll({ where: { _id: req.params.reactId } })
         .then((react) => res.status(200).json(react))
         .catch((error) => res.status(404).json({ error }));
     })
@@ -75,12 +82,12 @@ exports.modifyReact = (req, res) => {
 };
 
 exports.deleteReact = (req, res) => {
-  React.findOne({ _id: req.params.reactId })
+  React.findAll({ where: { _id: req.params.reactId } })
     .then((react) => {
       res.status(200).json(react);
-      React.deleteOne({ _id: req.params.reactId }).catch((error) =>
-        res.status(404).json({ error })
-      );
+      React.destroy({ where: { _id: req.params.reactId } })
+        .then((react) => res.status(200).json(react))
+        .catch((error) => res.status(404).json({ error }));
     })
     .catch((error) => res.status(404).json({ error }));
 };

@@ -97,11 +97,11 @@ exports.deleteThread = (req, res) => {
     { where: { messageId: req.params.messageId } }
   )
     .then(() => {
-      Message.destroy({ where: { _id: req.params.threadId } })
+      Message.destroy({ where: { threadId: req.params.threadId } })
         .then(() => {
           Thread.findAll({ where: { _id: req.params.threadId } })
-            .then(() => {
-              res.status(200).json(user);
+            .then((thread) => {
+              res.status(200).json(thread);
               Thread.destroy({ where: { _id: req.params.threadId } })
                 .then((thread) => res.status(200).json(thread))
                 .catch((error) => res.status(404).json({ error }));
@@ -185,7 +185,7 @@ exports.deleteMessage = (req, res) => {
   )
     .then(() => {
       Message.findAll({ where: { _id: req.params.messageId } })
-        .then(() => {
+        .then((message) => {
           res.status(200).json(message);
           Message.destroy({ where: { _id: req.params.messageId } })
             .then((message) => res.status(200).json(message))
