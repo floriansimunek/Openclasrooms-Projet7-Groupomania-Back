@@ -67,7 +67,7 @@ exports.getAllThreads = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getThread = (req, res) => {
-  Thread.findAll({ where: { _id: req.params.threadId } })
+  Thread.findOne({ where: { _id: req.params.threadId } })
     .then((thread) => res.status(200).json(thread))
     .catch((error) => res.status(404).json({ error }));
 };
@@ -83,7 +83,7 @@ exports.modifyThread = (req, res) => {
     { where: { _id: req.params.threadId } }
   )
     .then(() => {
-      Thread.findAll({ where: { _id: req.params.threadId } })
+      Thread.findOne({ where: { _id: req.params.threadId } })
         .then((thread) => res.status(200).json(thread))
         .catch((error) => res.status(404).json({ error }));
     })
@@ -99,7 +99,7 @@ exports.deleteThread = (req, res) => {
     .then(() => {
       Message.destroy({ where: { threadId: req.params.threadId } })
         .then(() => {
-          Thread.findAll({ where: { _id: req.params.threadId } })
+          Thread.findOne({ where: { _id: req.params.threadId } })
             .then((thread) => {
               res.status(200).json(thread);
               Thread.destroy({ where: { _id: req.params.threadId } })
@@ -154,7 +154,7 @@ exports.getAllMessages = (req, res) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getMessage = (req, res) => {
-  Message.findAll({ where: { _id: req.params.messageId } })
+  Message.findOne({ where: { _id: req.params.messageId } })
     .then((message) => res.status(200).json(message))
     .catch((error) => res.status(404).json({ error }));
 };
@@ -170,7 +170,7 @@ exports.modifyMessage = (req, res) => {
     { where: { _id: req.params.messageId } }
   )
     .then(() => {
-      Message.findAll({ where: { _id: req.params.messageId } })
+      Message.findOne({ where: { _id: req.params.messageId } })
         .then((message) => res.status(200).json(message))
         .catch((error) => res.status(404).json({ error }));
     })
@@ -184,7 +184,7 @@ exports.deleteMessage = (req, res) => {
     { where: { messageId: req.params.messageId } }
   )
     .then(() => {
-      Message.findAll({ where: { _id: req.params.messageId } })
+      Message.findOne({ where: { _id: req.params.messageId } })
         .then((message) => {
           res.status(200).json(message);
           Message.destroy({ where: { _id: req.params.messageId } })

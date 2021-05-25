@@ -52,7 +52,7 @@ exports.getAllReacts = (req, res) => {
 };
 
 exports.getReact = (req, res) => {
-  React.findAll(
+  React.findOne(
     { where: { _id: req.params.reactId } },
     { where: { threadId: req.params.threadId } },
     { where: { messageId: req.params.messageId } }
@@ -74,7 +74,7 @@ exports.modifyReact = (req, res) => {
     }
   )
     .then(() => {
-      React.findAll({ where: { _id: req.params.reactId } })
+      React.findOne({ where: { _id: req.params.reactId } })
         .then((react) => res.status(200).json(react))
         .catch((error) => res.status(404).json({ error }));
     })
@@ -82,7 +82,7 @@ exports.modifyReact = (req, res) => {
 };
 
 exports.deleteReact = (req, res) => {
-  React.findAll({ where: { _id: req.params.reactId } })
+  React.findOne({ where: { _id: req.params.reactId } })
     .then((react) => {
       res.status(200).json(react);
       React.destroy({ where: { _id: req.params.reactId } })

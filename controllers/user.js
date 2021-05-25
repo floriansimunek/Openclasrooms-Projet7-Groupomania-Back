@@ -193,14 +193,14 @@ exports.getUserProfile = (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.RANDOM_SECRET_TOKEN);
   const { userId } = decodedToken; // const userId = decodedToken.userId;
-  User.findAll({ where: { _id: userId } })
+  User.findOne({ where: { _id: userId } })
     .then((user) => res.status(200).json(user))
     .catch((error) => res.status(404).json({ error }));
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.getUser = (req, res, next) => {
-  User.findAll({ where: { _id: req.params.userId } })
+  User.findOne({ where: { _id: req.params.userId } })
     .then((user) => res.status(200).json(user))
     .catch((error) => res.status(404).json({ error }));
 };
@@ -230,7 +230,7 @@ exports.modifyUser = (req, res, next) => {
         },
       }
     ).then(() => {
-      User.findAll({ where: { _id: req.params.userId } })
+      User.findOne({ where: { _id: req.params.userId } })
         .then((user) => res.status(200).json(user))
         .catch((error) => res.status(404).json({ error }));
     });
@@ -239,7 +239,7 @@ exports.modifyUser = (req, res, next) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteUser = (req, res, next) => {
-  User.findAll({ where: { _id: req.params.userId } })
+  User.findOne({ where: { _id: req.params.userId } })
     .then((user) => {
       res.status(200).json(user);
       User.destroy({ where: { _id: req.params.userId } })
