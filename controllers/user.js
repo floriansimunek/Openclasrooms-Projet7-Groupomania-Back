@@ -243,7 +243,7 @@ exports.deleteUser = (req, res, next) => {
     .then((user) => {
       res.status(200).json(user);
       User.destroy({ where: { _id: req.params.userId } })
-        .then(() => {})
+        .then((user) => res.status(200).json(user))
         .catch((error) => res.status(404).json({ error }));
     })
     .catch((error) => res.status(404).json({ error }));
