@@ -133,22 +133,30 @@ const validateUserInputs = (
   );
 
   if (usernameValidation.message) {
-    return res.status(usernameValidation.code).json(usernameValidation);
+    res.status(usernameValidation.code).json(usernameValidation);
+    return false;
   } else if (emailValidation.message) {
-    return res.status(emailValidation.code).json(emailValidation);
+    res.status(emailValidation.code).json(emailValidation);
+    return false;
   } else if (passwordValidation.message) {
-    return res.status(passwordValidation.code).json(passwordValidation);
+    res.status(passwordValidation.code).json(passwordValidation);
+    return false;
   }
+  return true;
 };
 
 exports.createUser = (req, res, next) => {
-  validateUserInputs(
+  const validateUserInputsResult = validateUserInputs(
     req.body.username,
     req.body.email,
     req.body.password,
     req.body.confirmPassword,
     res
   );
+
+  if (!validateUserInputsResult) {
+    return;
+  }
 
   bcrypt
     .hash(req.body.password, 10)
@@ -200,7 +208,7 @@ exports.getUser = (req, res, next) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.modifyUser = (req, res, next) => {
-  validateUserInputs(
+  const validateUserInputsResult = validateUserInputs(
     req.body.username,
     req.body.email,
     req.body.password,
@@ -208,6 +216,10 @@ exports.modifyUser = (req, res, next) => {
     res,
     false
   );
+
+  if (!validateUserInputsResult) {
+    return;
+  }
 
   bcrypt.hash(req.body.password, 10).then((hash) => {
     User.update(
