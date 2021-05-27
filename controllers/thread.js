@@ -65,7 +65,7 @@ exports.modifyThread = (req, res) => {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 exports.deleteThread = (req, res) => {
   React.destroy({
-    where: { threadId: req.params.threadId, messageId: req.params.messageId },
+    where: { threadId: req.params.threadId },
   })
     .then(() => {
       Message.destroy({ where: { threadId: req.params.threadId } })
@@ -74,7 +74,7 @@ exports.deleteThread = (req, res) => {
             .then((thread) => {
               res.status(200).json(thread);
               Thread.destroy({ where: { _id: req.params.threadId } })
-                .then((thread) => res.status(200).json(thread))
+                .then()
                 .catch((error) => res.status(404).json({ error }));
             })
             .catch((error) => res.status(404).json({ error }));
@@ -158,7 +158,7 @@ exports.deleteMessage = (req, res) => {
         .then((message) => {
           res.status(200).json(message);
           Message.destroy({ where: { _id: req.params.messageId } })
-            .then((message) => res.status(200).json(message))
+            .then()
             .catch((error) => res.status(404).json({ error }));
         })
         .catch((error) => res.status(404).json({ error }));
